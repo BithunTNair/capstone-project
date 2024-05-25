@@ -33,22 +33,25 @@ const doSignup = (req, res) => {
 
 const doLogin = async (req, res) => {
     try {
-        userData = await USERS.findOne({ email: req.body.email });
+        const userData = await USERS.findOne({ email: req.body.email });
         if (userData) {
-            bcrypt.compare(password, userData.password, (err, result) => {
+            bcrypt.compare(req.body.password, userData.password, (err, result) => {
                 if (result) {
                     userData.password = undefined
-                    const options={
-                        expiresIn:'2d',
-                        algorithm:'HS256'
+                    const options = {
+                        expiresIn: '2d',
+                        algorithm: 'HS256'
                     }
-                    const token= jwt.sign({...userData},process.env.JWT_PASSWORD,options)
+                    const token = jwt.sign({ ...userData }, process.env.JWT_PASSWORD, options)
+                    res.status(200).json({ user: userData, token })
+                } else {
+                    res.status(401).json({ message: 'invalid credentials' });
                 }
             })
         }
 
     } catch (error) {
-
+        console.log(error);
     }
 };
 
