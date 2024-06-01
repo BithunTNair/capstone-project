@@ -1,8 +1,10 @@
 var express = require('express');
 const { userAuth } = require('../middlewares/authorization');
-const { getAllCourtsData } = require('../controllers/userController');
+const { getAllCourtsData, getSingleCourtData, getSchedules } = require('../controllers/userController');
 var router = express.Router();
 
-router.post('/getallcourtsdata',userAuth,getAllCourtsData);
+router.get('/getallcourtsdata',userAuth,getAllCourtsData);
+router.get('/getsinglecourtdata',userAuth,getSingleCourtData);
+router.get('/getschedules',userAuth,getSchedules);
 
 module.exports = router;

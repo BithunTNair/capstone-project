@@ -1,0 +1,39 @@
+const mongoose= require('mongoose');
+const orderSchema= mongoose.Schema({
+    courtId:{
+        type:mongoose.Types.ObjectId,
+        required:true,
+        ref:'courts'
+    },
+    slotIds:{
+        type:Array,
+        required:true
+    },
+    totalCost:{
+        type:Number,
+        required:true
+    },
+    status:{
+        type:Number,
+        default:1,
+        // 1 started,
+        // 2 successfull,
+        // failed,
+        // refund
+    },
+    bookedBy:{
+        type:mongoose.Types.ObjectId,
+        required:true,
+        ref:'users'
+    },
+    createdOn:{
+        type:Date,
+        default:new Date()
+    },
+    slotDate:{
+        type:Date
+    }
+});
+
+const orders= mongoose.model('orders',orderSchema);
+module.exports=orders;

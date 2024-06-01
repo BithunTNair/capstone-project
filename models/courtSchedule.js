@@ -1,30 +1,31 @@
-const mongoose= require('mongoose');
-const courtScheduleSchema= mongoose.Schema({
-    date:{
-        type:Date,
-        required:true
+const mongoose = require('mongoose');
+const courtScheduleSchema = mongoose.Schema({
+    date: {
+        type: Date,
+        required: true
     },
-    slot:{
-        type:Object,
-        required:true
+    slot: {
+        type: Object,
+        required: true
     },
-    cost:{
-        type:Number,
-        required:true
+    cost: {
+        type: Number,
+        required: true
     },
-    bookedBy:{
+    bookedBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'users'
+    },
+    orderId:{
         type:mongoose.Types.ObjectId,
-        ref:'users'
+        ref:'orders'
     },
-    cancellation:{
-        type:Array
-    },
-    courtId:{
-        type:mongoose.Types.ObjectId,
-        required:true
+    courtId: {
+        type: mongoose.Types.ObjectId,
+        required: true
     }
-})
+});
 
- const courtSchedules=mongoose.model('courtSchedules',courtScheduleSchema);
- courtScheduleSchema.index({date:1,'slot.id':1,courtId:1},{unique:true});
- module.exports=courtSchedules;
+const courtSchedules = mongoose.model('courtSchedules', courtScheduleSchema);
+courtScheduleSchema.index({ date: 1, 'slot.id': 1, courtId: 1 }, { unique: true });
+module.exports = courtSchedules;

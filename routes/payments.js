@@ -1,9 +1,10 @@
 var express = require('express');
+const { orders, verification } = require('../controllers/paymentController');
+const { userAuth } = require('../middlewares/authorization');
 var router = express.Router();
 
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.post('/orders',userAuth,orders);
+router.post('/verify',userAuth,verification);
 
 module.exports = router;
