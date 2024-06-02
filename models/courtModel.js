@@ -35,7 +35,11 @@ const courtSchema = mongoose.Schema({
         type: Date,
         default: new Date(),
     },
+    reviewId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'reviews'
+    }
 });
 
-const courts= mongoose.model('courts',courtSchema);
-module.exports=courts;
+const courts = mongoose.model('courts', courtSchema);
+module.exports = courts;

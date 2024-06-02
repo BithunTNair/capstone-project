@@ -1,5 +1,6 @@
 const COURT_SCHEMA = require('../models/courtModel');
 const COURT_SCHEDULES = require('../models/courtSchedule');
+const REVIEWS= require('../models/reviewsModel')
 const objectId = require('mongoose').Types.ObjectId;
 
 const getAllCourtsData = ((req, res, next) => {
@@ -58,5 +59,15 @@ const getSchedules = ((req, res,next) => {
     }
 })
 
+const getReviews=(async(req,res)=>{
+    const {courtId}=req.params;
+    try {
+        const reviews= await REVIEWS.find({courtId}).populate('userId','firstName')
+        res.status(200).json(reviews)
+    } catch (error) {
+        res.status(500).json({message:'Failed to get reviews'})
+    }
+})
 
-module.exports = { getAllCourtsData, getSingleCourtData, getSchedules }
+
+module.exports = { getAllCourtsData, getSingleCourtData, getSchedules,getReviews }
