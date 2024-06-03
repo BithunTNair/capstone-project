@@ -26,9 +26,19 @@ const updateReview = (async (req, res) => {
     const { rating, comment } = req.body;
     try {
         const editReview = await Reviews.findByIdAndUpdate(reviewId, { rating, comment }, { new: true });
-        res.status(200).json(editReview);
+        res.status(200).json({ message: 'review updated successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Failed to update review' });
     }
+});
+
+const deleteReview = (async (req, res) => {
+    const { reviewId } = req.params;
+    try {
+        await Reviews.findByIdAndDelete(reviewId);
+        res.status(200).json({ message: 'review deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete review' });
+    }
 })
-module.exports = { createReview, updateReview }
+module.exports = { createReview, updateReview, deleteReview }

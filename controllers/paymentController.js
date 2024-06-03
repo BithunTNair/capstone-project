@@ -1,7 +1,11 @@
 const ORDERS = require('../models/ordersModel');
 const COURT_SCHEDULES = require('../models/courtSchedule');
+const { sendBookingEmail } = require('./sendEmailController');
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const users = require('../models/userModel');
+
+
 
 const orders = (async (req, res) => {
     try {
@@ -28,7 +32,7 @@ const orders = (async (req, res) => {
         const options = {
             amount: totalCost * 100,
             currency: "INR",
-            receipt: newOrder._id,
+            receipt: newOrder._id.toString(),
         };
 
 
@@ -72,6 +76,18 @@ const verification = (async (req, res) => {
         await COURT_SCHEDULES.updateMany({ _id: { $in: slotIds } }, { $set: { bookedBy: req.userId, orderId: receipt } });
         await ORDERS.updateOne({ _id: receipt }, { $set: { status: 2, bookedBy: req.userId, courtId: courtId, date: new Date(date) } })
 
+        const users = await users.findById(req.userId);
+        if (!users) {
+            res.status(404).json({ message: 'user not found' })
+        };
+        const bookingDetails = {
+            firstName: users.firstName,
+            court: courtId,
+            date: date
+        };
+
+        await sendBookingEmail(users.email, bookingDetails)
+
         // THE PAYMENT IS LEGIT & VERIFIED
         // YOU CAN SAVE THE DETAILS IN YOUR DATABASE IF YOU WANT
 
@@ -83,5 +99,7 @@ const verification = (async (req, res) => {
     } catch (error) {
         res.status(500).send(error);
     }
-})
+});
+
+
 module.exports = { orders, verification }

@@ -18,8 +18,8 @@ const orderSchema= mongoose.Schema({
         default:1,
         // 1 started,
         // 2 successfull,
-        // failed,
-        // refund
+        // 3 failed,
+        // 4 refund
     },
     bookedBy:{
         type:mongoose.Types.ObjectId,
