@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth');
 const courtsRouter = require('./routes/courts');
 const paymentsRouter = require('./routes/payments');
 const reviewsRouter = require('./routes/reviews');
+const recommendationsRouter = require('./routes/recommendations');
 
 connectDB();
 
@@ -40,6 +41,7 @@ app.use('/auth', authRouter);
 app.use('/payments', paymentsRouter);
 app.use('/courts', courtsRouter);
 app.use('/reviews', reviewsRouter);
+app.use('/recommendations',recommendationsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

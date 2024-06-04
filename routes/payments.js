@@ -6,7 +6,6 @@ var router = express.Router();
 
 
 router.post('/orders',userAuth,orders);
-router.post('/verify',userAuth,verification);
-router.post('/bookingemail',userAuth,sendBookingEmail);
+router.post('/verify',userAuth,verification,sendBookingEmail);
 
 module.exports = router;

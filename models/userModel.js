@@ -28,11 +28,28 @@ const userSchema = mongoose.Schema({
     role: {
         type: Number,
         default: 3
+        // 1 admin
+        // 2 seller
+        // 3 user
     },
     active: {
         type: Boolean,
         default: true
-    }
+    },
+    preferences: {
+        type: [String],
+        default: []
+    },
+    pastBookings: [
+        {
+            courtId: {
+                type: mongoose.Types.ObjectId,
+                ref: 'courts'
+            },
+            date: Date,
+            time: String
+        }
+    ]
 });
 
 const users = mongoose.model('users', userSchema);

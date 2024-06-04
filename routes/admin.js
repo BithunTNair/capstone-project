@@ -1,5 +1,5 @@
 var express = require('express');
-const { adminAuth } = require('../middlewares/authorization');
+const { adminAuth, sellerAuth } = require('../middlewares/authorization');
 var router = express.Router();
 const multer = require('multer');
 const { createnewcourt, createCourtSchedule } = require('../controllers/adminController');
@@ -16,8 +16,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
-router.post('/createnewcourt', adminAuth, upload.array('files'), createnewcourt);
-router.post('/createcourtschedules', adminAuth, createCourtSchedule);
+router.post('/createnewcourt', adminAuth, sellerAuth, upload.array('files'), createnewcourt);
+router.post('/createcourtschedules', adminAuth, sellerAuth, createCourtSchedule);
 
 
 module.exports = router;
