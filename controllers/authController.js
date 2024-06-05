@@ -10,7 +10,8 @@ const doSignup = (req, res) => {
                 lastName: req.body.lastName,
                 email: req.body.email,
                 mobileNumber: req.body.mobileNumber,
-                password: hash
+                password: hash,
+                role:req.body.role ||3
 
             }).save()
                 .then((response) => {
@@ -37,13 +38,17 @@ const doLogin = async (req, res) => {
         if (userData) {
             bcrypt.compare(req.body.password, userData.password, (err, result) => {
                 if (result) {
-                    userData.password = undefined
+                   const tokenPayload={
+                    _id:userData._id,
+                    role:userData.role,
+                    email:userData.email
+                   }
                     const options = {
                         expiresIn: '2d',
                         algorithm: 'HS256'
                     }
-                    const token = jwt.sign({ ...userData }, process.env.JWT_PASSWORD, options)
-                    res.status(200).json({ user: userData, token })
+                    const token = jwt.sign(tokenPayload, process.env.JWT_PASSWORD, options)
+                    res.status(200).json({ user: {...userData._doc,password:undefined}, token })
                 } else {
                     res.status(401).json({ message: 'invalid credentials' });
                 }
