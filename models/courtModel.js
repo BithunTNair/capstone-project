@@ -31,6 +31,10 @@ const courtSchema = mongoose.Schema({
     courtPics: {
         type: Array,
     },
+    rate:{
+        type:Number,
+        required:true
+    },
     timeStamp: {
         type: Date,
         default: new Date(),

@@ -16,8 +16,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
-router.post('/createnewcourt', adminAuth, sellerAuth, upload.array('files'), createnewcourt);
-router.post('/createcourtschedules', adminAuth, sellerAuth, createCourtSchedule);
+router.post('/createnewcourt',adminAuth, upload.array('files'), createnewcourt);
+router.post('/createcourtschedules',  createCourtSchedule);
 
 
 module.exports = router;

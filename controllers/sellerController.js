@@ -1,3 +1,6 @@
+const COURT_SCHEMA = require('../models/courtModel'); 
+const ORDERS = require('../models/ordersModel');
+
 const createCourtSchedule = (req, res) => {
     try {
         const { startDate, endDate, courtId, cost, selectedSlots } = req.body;
@@ -37,5 +40,36 @@ const createCourtSchedule = (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
-module.exports = { createCourtSchedule };
+};
+
+const viewRates=(async(req,res)=>{
+    try {
+        const rates= await COURT_SCHEMA.find({},'name type rate');
+        res.status(200).json(rates);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:'something went wrong'})
+    }
+});
+
+const generateBills= (async(req,res)=>{
+    const {orderId}= req.body;
+    try {
+        const booking= await ORDERS.findById(orderId).populate('courtId slotIds bookedBy');
+        if(!booking){
+            res.status(404).json({message:'booking not found'})
+        }else{
+            const billDetails= {
+                bookingId:booking._id,
+                courtName:booking.courtId.name,
+                user: `${booking.bookedBy.firstName} ${booking.bookedBy.lastName}`,
+                date:booking.slotDate,
+                totalCost:booking.totalCost
+            }
+            res.status(200).json(billDetails)
+        }
+    } catch (error) {
+        res.status(500).json({message:'something went wrong'})
+    }
+})
+module.exports = { createCourtSchedule , viewRates,generateBills};
