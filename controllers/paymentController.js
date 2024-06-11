@@ -3,7 +3,7 @@ const COURT_SCHEDULES = require('../models/courtSchedule');
 const { sendBookingEmail } = require('./sendEmailController');
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const users = require('../models/userModel');
+const USERS = require('../models/userModel');
 
 
 
@@ -69,14 +69,15 @@ const verification = (async (req, res) => {
         shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
 
         const digest = shasum.digest("hex");
+        console.log(digest);
 
         // comaparing our digest with the actual signature
         if (digest !== razorpaySignature)
             return res.status(400).json({ msg: "Transaction not legit!" });
         await COURT_SCHEDULES.updateMany({ _id: { $in: slotIds } }, { $set: { bookedBy: req.userId, orderId: receipt } });
         await ORDERS.updateOne({ _id: receipt }, { $set: { status: 2, bookedBy: req.userId, courtId: courtId, date: new Date(date) } })
-
-        const users = await users.findById(req.userId);
+        
+        const users = await USERS.findById('665186334e2edc07aea6e461');
         if (!users) {
             res.status(404).json({ message: 'user not found' })
         };
@@ -98,6 +99,7 @@ const verification = (async (req, res) => {
         });
     } catch (error) {
         res.status(500).send(error);
+        console.log(error);
     }
 });
 

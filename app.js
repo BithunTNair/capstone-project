@@ -16,9 +16,11 @@ const paymentsRouter = require('./routes/payments');
 const reviewsRouter = require('./routes/reviews');
 const recommendationsRouter = require('./routes/recommendations');
 
-connectDB();
 
+connectDB();
 var app = express();
+
+
 
 app.use(cors({
   origin: ['http://localhost:3000']

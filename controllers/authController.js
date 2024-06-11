@@ -2,7 +2,7 @@ const USERS = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const doSignup = (req, res) => {
+const Signup = (req, res) => {
     bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS), function (err, hash) {
         try {
             USERS({
@@ -11,11 +11,12 @@ const doSignup = (req, res) => {
                 email: req.body.email,
                 mobileNumber: req.body.mobileNumber,
                 password: hash,
-                role:req.body.role ||3
+                preferences: req.body.preferences,
+                role: req.body.role || 3
 
             }).save()
                 .then((response) => {
-                    res.status(200).json({ message: 'signup successfull' })
+                    res.status(200).json({ message: 'signup successfull' ,response})
                 }).catch((error) => {
                     console.log(error);
                     if (error.code === 11000) {
@@ -32,23 +33,23 @@ const doSignup = (req, res) => {
 
 };
 
-const doLogin = async (req, res) => {
+const Login = async (req, res) => {
     try {
         const userData = await USERS.findOne({ email: req.body.email });
         if (userData) {
             bcrypt.compare(req.body.password, userData.password, (err, result) => {
                 if (result) {
-                   const tokenPayload={
-                    _id:userData._id,
-                    role:userData.role,
-                    email:userData.email
-                   }
+                    const tokenPayload = {
+                        _id: userData._id,
+                        role: userData.role,
+                        email: userData.email
+                    }
                     const options = {
                         expiresIn: '2d',
                         algorithm: 'HS256'
                     }
                     const token = jwt.sign(tokenPayload, process.env.JWT_PASSWORD, options)
-                    res.status(200).json({ user: {...userData._doc,password:undefined}, token })
+                    res.status(200).json({ user: { ...userData._doc, password: undefined }, token })
                 } else {
                     res.status(401).json({ message: 'invalid credentials' });
                 }
@@ -60,4 +61,4 @@ const doLogin = async (req, res) => {
     }
 };
 
-module.exports = { doSignup, doLogin };
+module.exports = { Signup, Login };

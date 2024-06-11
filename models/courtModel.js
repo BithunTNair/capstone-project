@@ -20,10 +20,10 @@ const courtSchema = mongoose.Schema({
         type: String,
     },
     pin: {
-        type: String,
+        type: Number,
     },
     contactNumber: {
-        type: String,
+        type: Number,
     },
     description: {
         type: String,

@@ -5,7 +5,7 @@ var router = express.Router();
 
 
 router.post('/createcourtschedules', sellerAuth,createCourtSchedule);
-router.get('/viewrates',sellerAuth,viewRates);
+router.get('/viewrates',viewRates);
 router.post('/generatebill',sellerAuth,generateBills);
 
 
