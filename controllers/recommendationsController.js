@@ -5,7 +5,7 @@ const COURT_SCHEMA = require('../models/courtModel');
 const getRecommendations = (async (req, res) => {
     try {
        
-        const user = await USERS.findById('666885fb6f2d501d8fd73dd7');
+        const user = await USERS.findById(req.id);
         if (!user) {
             res.status(404).json({ message: 'user not found' })
         }
@@ -21,4 +21,4 @@ const getRecommendations = (async (req, res) => {
         console.log(error);
     }
 });
-module.exports =   getRecommendations
+module.exports =   getRecommendations;

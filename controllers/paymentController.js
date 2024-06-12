@@ -97,6 +97,7 @@ const verification = (async (req, res) => {
             orderId: razorpayOrderId,
             paymentId: razorpayPaymentId,
         });
+      
     } catch (error) {
         res.status(500).send(error);
         console.log(error);
