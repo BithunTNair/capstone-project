@@ -1,26 +1,18 @@
-const SENDGRID = require('@sendgrid/mail');
-const { default: axios } = require('axios');
 
-SENDGRID.setApiKey(process.env.SENDGRID_API_KEY);
+const mailgun = require('mailgun-js');
+const DOMAIN = process.env.MAILGUN_DOMAIN;
+const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 
 const sendBookingEmail = (async (email, bookingDetails) => {
-    const url = 'https://api.formget.com/mailget/sendMail'
-    const payload = {
-        from: 'react666cr@gmail.com',
-        to: 'hydrafan236@gmail.com',
+    const data = {
+        from: 'Excited User <me@samples.mailgun.org>',
+        to: email,
         subject: 'Booking Confirmation',
-        // content: `Dear ${bookingDetails.firstName},\n\nYour booking is confirmed!\n\nDetails:\nCourt: ${bookingDetails.court}\nDate: ${bookingDetails.date}\n\nThank you for booking with us!`,
-        content:'dear sir/madam',
-        content_type: 'text/plain'
-
+        text: `Dear ${bookingDetails.firstName},\n\nYour booking is confirmed!\n\nDetails:\nCourt:${bookingDetails.court}\nDate:${bookingDetails.date}\n\nThank you for booking with us!`
     }
     try {
-        const response = await axios.post(url, payload);
-        if (response.data.status === success) {
-            console.log('email send successfully');
-        } else {
-            console.log('error occured', response.data.message);
-        }
+        await mg.messages().send(data)
+        console.log('mail sent successfully', data);
     } catch (error) {
         console.log(error);
     }

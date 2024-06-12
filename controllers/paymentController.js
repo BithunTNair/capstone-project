@@ -77,7 +77,7 @@ const verification = (async (req, res) => {
         await COURT_SCHEDULES.updateMany({ _id: { $in: slotIds } }, { $set: { bookedBy: req.userId, orderId: receipt } });
         await ORDERS.updateOne({ _id: receipt }, { $set: { status: 2, bookedBy: req.userId, courtId: courtId, date: new Date(date) } })
         
-        const users = await USERS.findById('665186334e2edc07aea6e461');
+        const users = await USERS.findById(req.userId);
         if (!users) {
             res.status(404).json({ message: 'user not found' })
         };

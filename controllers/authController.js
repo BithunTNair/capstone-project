@@ -1,6 +1,7 @@
 const USERS = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const BLACKLIST = require('../models/blackListModel');
 
 const Signup = (req, res) => {
     bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS), function (err, hash) {
@@ -16,7 +17,7 @@ const Signup = (req, res) => {
 
             }).save()
                 .then((response) => {
-                    res.status(200).json({ message: 'signup successfull' ,response})
+                    res.status(200).json({ message: 'signup successfull', response })
                 }).catch((error) => {
                     console.log(error);
                     if (error.code === 11000) {
@@ -61,4 +62,22 @@ const Login = async (req, res) => {
     }
 };
 
-module.exports = { Signup, Login };
+const Signout = async (req, res) => {
+    try {
+        const token = req.headers['authorization'].split(' ')[1]
+        const decodedToken = jwt.decode(token)
+
+        const SIGNOUT = new BLACKLIST({
+            token: token,
+            expiresAt: new Date(decodedToken.exp * 1000)
+        });
+
+        await SIGNOUT.save();
+        res.status(200).json({ message: 'successfully signedout', SIGNOUT })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'something went wrong' })
+    }
+}
+
+module.exports = { Signup, Login, Signout };

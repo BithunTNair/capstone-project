@@ -23,7 +23,7 @@ const orderSchema = mongoose.Schema({
     },
     bookedBy: {
         type: mongoose.Types.ObjectId,
-        // required: true,
+        required: true,
         ref: 'users'
     },
     createdOn: {

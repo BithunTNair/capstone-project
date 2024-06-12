@@ -5,7 +5,7 @@ const { userAuth } = require('../middlewares/authorization');
 var router = express.Router();
 
 
-router.post('/orders',orders);
-router.post('/verify',verification,sendBookingEmail);
+router.post('/orders',userAuth,orders);
+router.post('/verify',verification,userAuth,sendBookingEmail);
 
 module.exports = router;
