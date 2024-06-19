@@ -36,31 +36,32 @@ const Signup = (req, res) => {
 
 const Login = async (req, res) => {
     try {
-        const userData = await USERS.findOne({ email: req.body.email });
-        if (userData) {
-            bcrypt.compare(req.body.password, userData.password, (err, result) => {
-                if (result) {
-                    const tokenPayload = {
-                        _id: userData._id,
-                        role: userData.role,
-                        email: userData.email
-                    }
-                    const options = {
-                        expiresIn: '2d',
-                        algorithm: 'HS256'
-                    }
-                    const token = jwt.sign(tokenPayload, process.env.JWT_PASSWORD, options)
-                    res.status(200).json({ user: { ...userData._doc, password: undefined }, token })
-                } else {
-                    res.status(401).json({ message: 'invalid credentials' });
-                }
-            })
-        }
-
-    } catch (error) {
-        console.log(error);
-    }
-};
+      const { email, password } = req.body;
+      userData = await USERS.findOne({ email: email });
+      if (userData) {
+        bcrypt.compare(password, userData.password, (err, result) => {
+          if (result) {
+            userData.password = undefined;
+            const options = {
+              expiresIn: "2d",
+            };
+  
+            const token = jwt.sign(
+              { ...userData },
+              process.env.JWT_PASSWORD,
+              options
+            );
+            res.status(200).json({ user: userData, token });
+          } else {
+            res.status(401).json({ message: "Invalid credentials" });
+          }
+        });
+      } else {
+        res.status(401).json({ message: "Invalid credentials" });
+      }
+    } catch (error) {}
+  };
+  
 
 const Signout = async (req, res) => {
     try {
