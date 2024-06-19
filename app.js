@@ -23,7 +23,7 @@ var app = express();
 
 
 app.use(cors({
-  origin: [ 'capstone-project-fe-plum.vercel.app']
+  origin: [ 'https://capstone-project-fe1.onrender.com']
 }));
 
 
