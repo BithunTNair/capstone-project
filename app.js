@@ -23,7 +23,7 @@ var app = express();
 
 
 app.use(cors({
-  origin: ['http://localhost:3000']
+  origin: [ 'capstone-project-fe-plum.vercel.app']
 }));
 
 
