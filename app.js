@@ -23,7 +23,7 @@ var app = express();
 
 
 app.use(cors({
-  origin: [ 'https://capstone-project-fe1.onrender.com']
+  origin: ['https://capstone-project-fe1.onrender.com']
 }));
 
 

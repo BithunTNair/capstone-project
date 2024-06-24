@@ -7,10 +7,7 @@ const courtSchema = mongoose.Schema({
     type: {
         type: String,
     },
-    address1: {
-        type: String,
-    },
-    address2: {
+    address: {
         type: String,
     },
     location: {
