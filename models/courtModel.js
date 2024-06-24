@@ -30,7 +30,6 @@ const courtSchema = mongoose.Schema({
     },
     rate:{
         type:Number,
-        required:true
     },
     timeStamp: {
         type: Date,

@@ -33,6 +33,7 @@ const createnewcourt = (req, res) => {
         }).save().then((response) => {
             res.status(200).json({ message: 'court added successfully' ,response})
         }).catch((err) => {
+            console.log(err);
             res.status(500).json({ message: 'something went wrong' })
         })
 

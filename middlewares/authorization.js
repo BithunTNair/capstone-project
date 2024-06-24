@@ -7,8 +7,8 @@ const userAuth = (req, res, next) => {
             if (err || !decodedToken) {
                 res.status(401).json({ message: 'unauthorized user' })
             } else {
-                req.userId = decodedToken._id;
-                req.userRole = decodedToken.role;
+                req.userId = decodedToken._doc._id;
+                req.userRole = decodedToken._doc.role;
                 next();
             }
         })
@@ -20,14 +20,15 @@ const userAuth = (req, res, next) => {
 
 const adminAuth = (req, res, next) => {
     try {
-        const token = req.headers['authorization'].split(' ')[1]
+        const token = req.headers['authorization'].split(' ')[1];
         jwt.verify(token, process.env.JWT_PASSWORD, (err, decodedToken) => {
-            if (err || !decodedToken || decodedToken.role !== 1) {
+            if (err || !decodedToken || decodedToken._doc.role!==1) {
                 res.status(401).json({ message: 'unauthorized admin' })
             } else {
-                req.userId = decodedToken._id;
+                req.userId = decodedToken._doc._id;
+                req.userRole = decodedToken._doc.role;
+                console.log(req.userId);
                 next();
-
             }
         })
     } catch (error) {
@@ -44,7 +45,7 @@ const sellerAuth = (req, res, next) => {
             if (err || !decodedToken || decodedToken.role !== 2) {
                 res.status(401).json({ message: 'unauthorized seller' })
             } else {
-                req.userId = decodedToken._id;
+                req.userId = decodedToken._doc._id;
                 next();
 
             }
